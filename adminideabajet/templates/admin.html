@@ -1,0 +1,464 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Idea Bajet - Admin</title>
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+</head>
+<body>
+
+<div class="container">
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h3>Idea Bajet</h3>
+      <div class="user-profile">
+        <div class="profile-avatar">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+        </div>
+        <p>Welcome, {{ admin.name|default:"Admin" }}</p>
+      </div>
+    </div>
+    <ul class="nav-menu">
+      <li><a onclick="showSection('dashboard')" class="nav-link active" data-section="dashboard">Dashboard</a></li>
+      <li><a href="#" onclick="showSection('aset')" class="nav-link" data-section="aset">Aset</a></li>
+      <li><a href="#" onclick="showSection('lokasi')" class="nav-link" data-section="lokasi">Lokasi</a></li>
+      <li><a href="#" onclick="showSection('e1')" class="nav-link" data-section="e1">Elemen 1</a></li>
+      <li><a href="#" onclick="showSection('e2')" class="nav-link" data-section="e2">Elemen 2</a></li>
+      <li><a href="#" onclick="showSection('e3')" class="nav-link" data-section="e3">Elemen 3</a></li>
+      <li><a href="#" onclick="showSection('e4')" class="nav-link" data-section="e4">Elemen 4</a></li>
+      <li><a href="#" onclick="showSection('e5')" class="nav-link" data-section="e5">Elemen 5</a></li>
+      <li><a href="#" onclick="showSection('e6')" class="nav-link" data-section="e6">Elemen 6</a></li>
+      <li><a href="#" onclick="showSection('e7')" class="nav-link" data-section="e7">Elemen 7</a></li>
+      <li><a href="#" onclick="showSection('e8')" class="nav-link" data-section="e8">Elemen 8</a></li>
+      <li class="logout-item">
+        <form method="post" action="{% url 'logout' %}" style="margin: 0;">
+          {% csrf_token %}
+          <button type="submit" class="nav-link logout-btn">Logout</button>
+        </form>
+      </li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+     <!-- Message container -->
+   {% if message %}
+   <div id="message-box" style="padding:10px; background-color:#d4edda; color:#155724; border:1px solid #c3e6cb; margin-bottom: 15px;">
+     {{ message }}
+   </div>
+   {% endif %}
+
+    <!-- Dashboard Section -->
+    <div id="dashboard" class="content-section active">
+      <h2 class="dashboard-title">Admin Dashboard</h2>
+      
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📊</div>
+          <div class="stat-content">
+            <h3>Jumlah</h3>
+            <p class="stat-number">2303</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-content">
+            <h3>Users</h3>
+            <p class="stat-number">156</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📈</div>
+          <div class="stat-content">
+            <h3>Growth</h3>
+            <p class="stat-number">+12%</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🎯</div>
+          <div class="stat-content">
+            <h3>Target</h3>
+            <p class="stat-number">85%</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Grid -->
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3>Visitor Statistics</h3>
+          <div class="chart-container">
+            <canvas id="visitorChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h3>Revenue Overview</h3>
+          <div class="chart-container">
+            <canvas id="revenueChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h3>Element Distribution</h3>
+          <div class="chart-container">
+            <canvas id="elementChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h3>Monthly Trends</h3>
+          <div class="chart-container">
+            <canvas id="trendChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Aset Section -->
+    <div id="aset" class="content-section">
+      <h2 class="dashboard-title">Aset Management</h2>
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+        <button class="btn-create" onclick="showForm('aset')">Create</button>
+      </div>
+      <form id="createForm-aset" class="create-form" method="post" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="section" value="aset">
+        <select name="elemen5_id" required style="margin-bottom: 10px; padding: 8px; width: 100%;">
+          <option value="">Pilih Elemen 5</option>
+          {% for elemen5 in e5_data %}
+          <option value="{{ elemen5.e5id }}">{{ elemen5.e5 }}</option>
+          {% endfor %}
+        </select>
+        <input type="text" name="aset" placeholder="Tambah Aset Baharu" required>
+        <button type="submit" class="btn-create">Save</button>
+      </form>
+      
+      <!-- Single table with 3 columns -->
+      <table class="table table-bordered">
+        <tr>
+          <th>Aset</th>
+          <th>Elemen 5</th>
+          <th>Action</th>
+        </tr>
+        {% for aset in aset_data %}
+        <tr id="row-aset-{{ aset.asetid }}">
+          <td id="aset-{{ aset.asetid }}">{{ aset.list_aset }}</td>
+          <td>{{ aset.elemen5.e5|default:"-" }}</td>
+          <td id="action-aset-{{ aset.asetid }}">
+            <button class="btn-create" onclick="editRow('aset', {{ aset.asetid }}, '{{ aset.list_aset|escapejs }}')">Edit</button>
+            <button class="btn-create" style="background:#e74c3c;" onclick="showDeleteConfirmation('aset', {{ aset.asetid }}, '{{ aset.list_aset|escapejs }}')">Delete</button>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="3">Tiada data.</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <!-- Lokasi Section -->
+    <div id="lokasi" class="content-section">
+      <h2 class="dashboard-title">Lokasi Management</h2>
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+        <button class="btn-create" onclick="showForm('lokasi')">Create</button>
+      </div>
+      <form id="createForm-lokasi" class="create-form" method="post" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="section" value="lokasi">
+        <input type="text" name="list_lokasi" placeholder="Tambah Lokasi Baharu" required>
+        <button type="submit" class="btn-create">Save</button>
+      </form>
+      <table class="table table-bordered">
+        <tr>
+          <th>Senarai Lokasi</th>
+          <th>Action</th>
+        </tr>
+        {% for item in lokasi_data %}
+        <tr id="row-lokasi-{{ item.lid }}">
+          <td id="lokasi-{{ item.lid }}">{{ item.list_lokasi }}</td>
+          <td id="action-lokasi-{{ item.lid }}">
+            <button class="btn-create" onclick="editRow('lokasi', {{ item.lid }}, '{{ item.list_lokasi|escapejs }}')">Edit</button>
+            <button class="btn-create" style="background:#e74c3c;" onclick="showDeleteConfirmation('lokasi', {{ item.lid }}, '{{ item.list_lokasi|escapejs }}')">Delete</button>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="2">Tiada data.</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <!-- E1 Section -->
+    <div id="e1" class="content-section">
+      <h2 class="dashboard-title">Elemen 1: Ipoh Bandar Terbersih</h2>
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+        <button class="btn-create" onclick="showForm('e1')">Create</button>
+      </div>
+      <form id="createForm-e1" class="create-form" method="post" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="section" value="e1">
+        <input type="text" name="e1" placeholder="Tambah Elemen Baharu" required>
+        <button type="submit" class="btn-create">Save</button>
+      </form>
+      <table class="table table-bordered">
+        <tr>
+          <th>Senarai Elemen 1: Ipoh Bandar Terbersih</th>
+          <th>Action</th>
+        </tr>
+        {% for item in e1_data %}
+        <tr id="row-e1-{{ item.e1id }}">
+          <td id="e1-{{ item.e1id }}">{{ item.e1 }}</td>
+          <td id="action-e1-{{ item.e1id }}">
+            <button class="btn-create" onclick="editRow('e1', {{ item.e1id }}, '{{ item.e1|escapejs }}')">Edit</button>
+            <button class="btn-create" style="background:#e74c3c;" onclick="showDeleteConfirmation('e1', {{ item.e1id }}, '{{ item.e1|escapejs }}')">Delete</button>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="2">Tiada data.</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <!-- E2 Section -->
+    <div id="e2" class="content-section">
+      <h2 class="dashboard-title">Elemen 2: Kemudahan Awam dan Taman</h2>
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+        <button class="btn-create" onclick="showForm('e2')">Create</button>
+      </div>
+      <form id="createForm-e2" class="create-form" method="post" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="section" value="e2">
+        <input type="text" name="e2" placeholder="Tambah Elemen Baharu" required>
+        <button type="submit" class="btn-create">Save</button>
+      </form>
+      <table class="table table-bordered">
+        <tr>
+          <th>Senarai Elemen 2: Kemudahan Awam dan Taman</th>
+          <th>Action</th>
+        </tr>
+        {% for item in e2_data %}
+        <tr id="row-e2-{{ item.e2id }}">
+          <td id="e2-{{ item.e2id }}">{{ item.e2 }}</td>
+          <td id="action-e2-{{ item.e2id }}">
+            <button class="btn-create" onclick="editRow('e2', {{ item.e2id }}, '{{ item.e2|escapejs }}')">Edit</button>
+            <button class="btn-create" style="background:#e74c3c;" onclick="showDeleteConfirmation('e2', {{ item.e2id }}, '{{ item.e2|escapejs }}')">Delete</button>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="2">Tiada data.</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <!-- E3 Section -->
+    <div id="e3" class="content-section">
+      <h2 class="dashboard-title">Elemen 3: Kemudahan Infrastruktur</h2>
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+        <button class="btn-create" onclick="showForm('e3')">Create</button>
+      </div>
+      <form id="createForm-e3" class="create-form" method="post" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="section" value="e3">
+        <input type="text" name="e3" placeholder="Tambah Elemen Baharu" required>
+        <button type="submit" class="btn-create">Save</button>
+      </form>
+      <table class="table table-bordered">
+        <tr>
+          <th>Senarai Elemen 3: Kemudahan Infrastruktur</th>
+          <th>Action</th>
+        </tr>
+        {% for item in e3_data %}
+        <tr id="row-e3-{{ item.e3id }}">
+          <td id="e3-{{ item.e3id }}">{{ item.e3 }}</td>
+          <td id="action-e3-{{ item.e3id }}">
+            <button class="btn-create" onclick="editRow('e3', {{ item.e3id }}, '{{ item.e3|escapejs }}')">Edit</button>
+            <button class="btn-create" style="background:#e74c3c;" onclick="showDeleteConfirmation('e3', {{ item.e3id }}, '{{ item.e3|escapejs }}')">Delete</button>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="2">Tiada data.</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <!-- E4 Section -->
+    <div id="e4" class="content-section">
+      <h2 class="dashboard-title">Elemen 4: Bangunan dan Hartanah Majlis</h2>
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+        <button class="btn-create" onclick="showForm('e4')">Create</button>
+      </div>
+      <form id="createForm-e4" class="create-form" method="post" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="section" value="e4">
+        <input type="text" name="e4" placeholder="Tambah Elemen Baharu" required>
+        <button type="submit" class="btn-create">Save</button>
+      </form>
+      <table class="table table-bordered">
+        <tr>
+          <th>Senarai Elemen 4: Bangunan dan Hartanah Majlis</th>
+          <th>Action</th>
+        </tr>
+        {% for item in e4_data %}
+        <tr id="row-e4-{{ item.e4id }}">
+          <td id="e4-{{ item.e4id }}">{{ item.e4 }}</td>
+          <td id="action-e4-{{ item.e4id }}">
+            <button class="btn-create" onclick="editRow('e4', {{ item.e4id }}, '{{ item.e4|escapejs }}')">Edit</button>
+            <button class="btn-create" style="background:#e74c3c;" onclick="showDeleteConfirmation('e4', {{ item.e4id }}, '{{ item.e4|escapejs }}')">Delete</button>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="2">Tiada data.</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <!-- E5 Section -->
+    <div id="e5" class="content-section">
+      <h2 class="dashboard-title">Elemen 5: Harta Modal (Aset)</h2>
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+        <button class="btn-create" onclick="showForm('e5')">Create</button>
+      </div>
+      <form id="createForm-e5" class="create-form" method="post" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="section" value="e5">
+        <input type="text" name="e5" placeholder="Tambah Elemen Baharu" required>
+        <button type="submit" class="btn-create">Save</button>
+      </form>
+      <table class="table table-bordered">
+        <tr>
+          <th>Senarai Elemen 5: Harta Modal (Aset)</th>
+          <th>Action</th>
+        </tr>
+        {% for item in e5_data %}
+        <tr id="row-e5-{{ item.e5id }}">
+          <td id="e5-{{ item.e5id }}">{{ item.e5 }}</td>
+          <td id="action-e5-{{ item.e5id }}">
+            <button class="btn-create" onclick="editRow('e5', {{ item.e5id }}, '{{ item.e5|escapejs }}')">Edit</button>
+            <button class="btn-create" style="background:#e74c3c;" onclick="showDeleteConfirmation('e5', {{ item.e5id }}, '{{ item.e5|escapejs }}')">Delete</button>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="2">Tiada data.</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <!-- E6 Section -->
+    <div id="e6" class="content-section">
+      <h2 class="dashboard-title">Elemen 6: Ipoh Bandar (Bandar Pintar)</h2>
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+        <button class="btn-create" onclick="showForm('e6')">Create</button>
+      </div>
+      <form id="createForm-e6" class="create-form" method="post" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="section" value="e6">
+        <input type="text" name="e6" placeholder="Tambah Elemen Baharu" required>
+        <button type="submit" class="btn-create">Save</button>
+      </form>
+      <table class="table table-bordered">
+        <tr>
+          <th>Senarai Elemen 6: Ipoh Bandar (Bandar Pintar)</th>
+          <th>Action</th>
+        </tr>
+        {% for item in e6_data %}
+        <tr id="row-e6-{{ item.e6id }}">
+          <td id="e6-{{ item.e6id }}">{{ item.e6 }}</td>
+          <td id="action-e6-{{ item.e6id }}">
+            <button class="btn-create" onclick="editRow('e6', {{ item.e6id }}, '{{ item.e6|escapejs }}')">Edit</button>
+            <button class="btn-create" style="background:#e74c3c;" onclick="showDeleteConfirmation('e6', {{ item.e6id }}, '{{ item.e6|escapejs }}')">Delete</button>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="2">Tiada data.</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <!-- E7 Section -->
+    <div id="e7" class="content-section">
+      <h2 class="dashboard-title">Elemen 7: Ipoh Bandar (Bandar Rendah Karbon)</h2>
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+        <button class="btn-create" onclick="showForm('e7')">Create</button>
+      </div>
+      <form id="createForm-e7" class="create-form" method="post" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="section" value="e7">
+        <input type="text" name="e7" placeholder="Tambah Elemen Baharu" required>
+        <button type="submit" class="btn-create">Save</button>
+      </form>
+      <table class="table table-bordered">
+        <tr>
+          <th>Senarai Elemen 7: Ipoh Bandar (Bandar Rendah Karbon)</th>
+          <th>Action</th>
+        </tr>
+        {% for item in e7_data %}
+        <tr id="row-e7-{{ item.e7id }}">
+          <td id="e7-{{ item.e7id }}">{{ item.e7 }}</td>
+          <td id="action-e7-{{ item.e7id }}">
+            <button class="btn-create" onclick="editRow('e7', {{ item.e7id }}, '{{ item.e7|escapejs }}')">Edit</button>
+            <button class="btn-create" style="background:#e74c3c;" onclick="showDeleteConfirmation('e7', {{ item.e7id }}, '{{ item.e7|escapejs }}')">Delete</button>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="2">Tiada data.</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <!-- E8 Section -->
+    <div id="e8" class="content-section">
+      <h2 class="dashboard-title">Elemen 8: Pembangunan Ekonomi Masyarakat dan Pelancongan</h2>
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+        <button class="btn-create" onclick="showForm('e8')">Create</button>
+      </div>
+      <form id="createForm-e8" class="create-form" method="post" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="section" value="e8">
+        <input type="text" name="e8" placeholder="Tambah Elemen Baharu" required>
+        <button type="submit" class="btn-create">Save</button>
+      </form>
+      <table class="table table-bordered">
+        <tr>
+          <th>Senarai Elemen 8: Pembangunan Ekonomi Masyarakat dan Pelancongan</th>
+          <th>Action</th>
+        </tr>
+        {% for item in e8_data %}
+        <tr id="row-e8-{{ item.e8id }}">
+          <td id="e8-{{ item.e8id }}">{{ item.e8 }}</td>
+          <td id="action-e8-{{ item.e8id }}">
+            <button class="btn-create" onclick="editRow('e8', {{ item.e8id }}, '{{ item.e8|escapejs }}')">Edit</button>
+            <button class="btn-create" style="background:#e74c3c;" onclick="showDeleteConfirmation('e8', {{ item.e8id }}, '{{ item.e8|escapejs }}')">Delete</button>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="2">Tiada data.</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+</div>
+
+</body>
+</html> 

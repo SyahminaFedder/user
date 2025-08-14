@@ -1,0 +1,370 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Idea Bajet</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+<header>
+    <a href="#" class="logo">
+        <img src="{% static 'image/mbi.svg' %}" alt="mbi logo">
+    </a>
+    <p>Idea Bajet</p>
+    <ul class="navbar">
+        <li><a href="#admin">Admin</a></li>
+    </ul>
+</header>
+
+<!-- Alert Container -->
+<div id="alertContainer"></div>
+
+<!-- Input Form -->
+<form id="InputForm">
+    
+    <!-- Steps -->
+<div class="form-steps">
+    <div class="step active" id="step1">1</div>
+    <div class="step" id="step2">2</div>
+    <div class="step" id="step3">3</div>
+</div>
+
+    <!-- Step 1: Demografik -->
+    <div class="form-step active" id="step1-content">
+        <h3 class="text-center">BAHAGIAN 1: DEMOGRAFIK</h3>
+        <h5>Maklumat Anda</h5>
+        
+        <label for="name" class="starlabel">Nama</label>
+        <input id="name" name="name" type="text" class="form-control" placeholder="Nama anda" required>
+        
+        <label for="email">Emel</label>
+        <input id="email" name="email" type="text" class="form-control" placeholder="Emel anda (pilihan)" >
+        
+        <div class="inline-block">
+            <label for="jantina" class="starlabel">Jantina:</label>
+            <select name="jantina" id="jantina" class="form-control" required>
+                <option value="">---Sila Pilih---</option>
+                <option value="Lelaki">Lelaki</option>
+                <option value="Perempuan">Perempuan</option>
+            </select>
+        </div>
+        
+        <div class="inline-block">
+            <label for="bangsa" class="starlabel">Bangsa:</label>
+            <select name="bangsa" id="bangsa" class="form-control" required>
+                <option value="">---Sila Pilih---</option>
+                <option value="Melayu">Melayu</option>
+                <option value="India">India</option>
+                <option value="Cina">Cina</option>
+                <option value="Lain-lain">Lain-lain</option>
+            </select>
+        </div>
+        
+        <div class="inline-block">
+            <label for="umur" class="starlabel">Umur:</label>
+            <select name="umur" id="umur" class="form-control" required>
+                <option value="">---Sila Pilih---</option>
+                <option value="18 - 25 tahun">18 - 25 tahun</option>
+                <option value="26 - 39 tahun">26 - 39 tahun</option>
+                <option value="40 - 59 tahun">40 - 59 tahun</option>
+                <option value="60 dan ke atas">60 dan ke atas</option>
+            </select>
+        </div>
+        
+        <div class="inline-block-25">
+            <label for="job" class="starlabel">Pekerjaan:</label>
+            <select onchange="yesnoCheck(this);" name="job" id="job" class="form-control" required>
+                <option value="">---Sila Pilih---</option>
+                <option value="Ahli Majlis, MBI">Ahli Majlis, MBI</option>
+                <option value="Kakitangan MBI">Kakitangan MBI</option>
+                <option value="Kakitangan Kerajaan">Kakitangan Kerajaan</option>
+                <option value="Kakitangan Swasta">Kakitangan Swasta</option>
+                <option value="Bekerja Sendiri">Bekerja Sendiri</option>
+                <option value="Tidak Bekerja">Tidak Bekerja</option>
+                <option value="Pelajar">Pelajar</option>
+                <option value="Pesara">Pesara</option>
+            </select>
+        </div>
+        
+        <div class="inline-block-25">
+            <div id="ifYes" style="display: none;">
+                <label for="zon" class="starlabel">Zon:</label>
+                <select name="zon" id="zon" class="form-control" >
+                    <option value="">---Sila Pilih---</option>
+                    <option value="Zon 1">Zon 1</option>
+                    <option value="Zon 2">Zon 2</option>
+                    <option value="Zon 3">Zon 3</option>
+                    <option value="Zon 4">Zon 4</option>
+                    <option value="Zon 5">Zon 5</option>
+                    <option value="Zon 6">Zon 6</option>
+                    <option value="Zon 7">Zon 7</option>
+                    <option value="Zon 8">Zon 8</option>
+                    <option value="Zon 9">Zon 9</option>
+                    <option value="Zon 10">Zon 10</option>
+                    <option value="Zon 11">Zon 11</option>
+                    <option value="Zon 12">Zon 12</option>
+                    <option value="Zon 13">Zon 13</option>
+                    <option value="Zon 14">Zon 14</option>
+                    <option value="Zon 15">Zon 15</option>
+                    <option value="Zon 16">Zon 16</option>
+                    <option value="Zon 17">Zon 17</option>
+                    <option value="Zon 18">Zon 18</option>
+                    <option value="Zon 19">Zon 19</option>
+                    <option value="Zon 20">Zon 20</option>
+                    <option value="Zon 21">Zon 21</option>
+                    <option value="Zon 22">Zon 22</option>
+                    <option value="Zon 23">Zon 23</option>
+                    <option value="Zon 24">Zon 24</option>
+                </select>
+            </div>
+        </div>
+        
+        <br><br><br><p>(<span style="color:#FF0000">*</span>) Wajib Diisi</p>
+        
+        <div class="text-end">
+            <button type="button" class="btn btn-form" onclick="nextStep()">Seterusnya</button>
+        </div>
+    </div>
+    
+    <!-- Step 2: Pilih Keutamaan -->
+     {% csrf_token %}
+    <div class="form-step" id="step2-content">
+        <h3 class="text-center">BAHAGIAN 2: PILIH KEUTAMAAN ANDA</h3>
+        <h5>Sila Pilih Sub Elemen Yang Menjadi Keutamaan Anda</h5>
+        
+        <div id="content">
+            <!-- Elemen 1 -->
+            <div class="card">
+                <div class="card-header"><label for="el1"><b>ELEMEN 1: IPOH BANDAR TERBERSIH</b></label></div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <span id="error"></span>
+                        <table class="table table-bordered" id="item_table1">
+                            <tr>
+                                <th>Pilihan</th>
+                                <th>Lokasi</th>
+                                <th>Butiran</th>
+                                <th><button type="button" name="addEl1" class="btn btn-success btn-sm addEl" data-element="1"><i class="fas fa-plus"></i></button></th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- Elemen 2 -->
+            <div class="card">
+                <div class="card-header"><label for="el2"><b>ELEMEN 2: KEMUDAHAN AWAM DAN TAMAN</b></label></div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <span id="error"></span>
+                        <table class="table table-bordered" id="item_table2">
+                            <tr>
+                                <th>Pilihan</th>
+                                <th>Lokasi</th>
+                                <th>Butiran</th>
+                                <th><button type="button" name="addEl2" class="btn btn-success btn-sm addEl" data-element="2"><i class="fas fa-plus"></i></button></th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Elemen 3 -->
+            <div class="card">
+                <div class="card-header"><label for="el3"><b>ELEMEN 3: KEMUDAHAN INFRASTRUKTUR</b></label></div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <span id="error"></span>
+                        <table class="table table-bordered" id="item_table3">
+                            <tr>
+                                <th>Pilihan</th>
+                                <th>Lokasi</th>
+                                <th>Butiran</th>
+                                <th><button type="button" name="addEl3" class="btn btn-success btn-sm addEl" data-element="3"><i class="fas fa-plus"></i></button></th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Elemen 4 -->
+            <div class="card">
+                <div class="card-header"><label for="el4"><b>ELEMEN 4: BANGUNAN DAN HARTANAH MAJLIS</b></label></div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <span id="error"></span>
+                        <table class="table table-bordered" id="item_table4">
+                            <tr>
+                                <th>Pilihan</th>
+                                <th>Lokasi</th>
+                                <th>Butiran</th>
+                                <th><button type="button" name="addEl4" class="btn btn-success btn-sm addEl" data-element="4"><i class="fas fa-plus"></i></button></th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Elemen 5 -->
+            <div class="card">
+                <div class="card-header"><label for="el5"><b>ELEMEN 5: HARTA MODAL (ASET)</b></label></div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <span id="error"></span>
+                        <table class="table table-bordered" id="item_table5">
+                            <tr>
+                                <th>Pilihan</th>
+                                <th>Aset</th>
+                                <th>Butiran Peralatan</th>
+                                <th><button type="button" name="addEl5" class="btn btn-success btn-sm addEl" data-element="5"><i class="fas fa-plus"></i></button></th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Elemen 6 -->
+            <div class="card">
+                <div class="card-header"><label for="el6"><b>ELEMEN 6: IPOH BANDAR (BANDAR PINTAR)</b></label></div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <span id="error"></span>
+                        <table class="table table-bordered" id="item_table6">
+                            <tr>
+                                <th>Pilihan</th>
+                                <th>Lokasi</th>
+                                <th>Butiran</th>
+                                <th><button type="button" name="addEl6" class="btn btn-success btn-sm addEl" data-element="6"><i class="fas fa-plus"></i></button></th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Elemen 7 -->
+            <div class="card">
+                <div class="card-header"><label for="el7"><b>ELEMEN 7: IPOH BANDAR (BANDAR RENDAH KARBON)</b></label></div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <span id="error"></span>
+                        <table class="table table-bordered" id="item_table7">
+                            <tr>
+                                <th>Pilihan</th>
+                                <th>Lokasi</th>
+                                <th>Butiran</th>
+                                <th><button type="button" name="addEl7" class="btn btn-success btn-sm addEl" data-element="7"><i class="fas fa-plus"></i></button></th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Elemen 8 -->
+            <div class="card">
+                <div class="card-header"><label for="el8"><b>ELEMEN 8: PEMBANGUNAN EKONOMI MASYARAKAT DAN PELANCONGAN</b></label></div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <span id="error"></span>
+                        <table class="table table-bordered" id="item_table8">
+                            <tr>
+                                <th>Pilihan</th>
+                                <th>Lokasi</th>
+                                <th>Butiran</th>
+                                <th><button type="button" name="addEl8" class="btn btn-success btn-sm addEl" data-element="8"><i class="fas fa-plus"></i></button></th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-end">
+            <button type="button" class="btn btn-secondary me-2" onclick="prevStep()">Sebelumnya</button>
+            <button type="button" class="btn btn-form" onclick="nextStep()">Seterusnya</button>
+        </div>
+    </div>
+    
+    <!-- Step 3: Cadangan -->
+    <div class="form-step" id="step3-content">
+        <h3 class="text-center">BAHAGIAN 3: CADANGAN ANDA</h3>
+        <h5>Sila Kemukakan Cadangan Idea Bajet 2027 Anda:-</h5>
+        
+        <label for="cad">Cadangan(sekiranya ada):</label>
+        <textarea id="cad" name="cad" class="form-control" placeholder="Tidak Melebihi 1000 Patah Perkataan" maxlength="100000" rows="6"></textarea>
+        
+        <div class="text-end mt-3">
+            <button type="button" class="btn btn-secondary me-2" onclick="prevStep()">Sebelumnya</button>
+            <button type="submit" class="btn btn-form">
+                Hantar Cadangan
+            </button>
+        </div>
+    </div>
+</form>
+</div>
+</div>
+
+<script>
+// Set up global data for JavaScript
+window.elementOptions = {
+    1: `<option value="">---Sila Pilih Sub Elemen---</option>
+        {% for elemen1 in e1_data %}
+        <option value="{{ elemen1.e1id }}">{{ elemen1.e1 }}</option>
+        {% endfor %}`,
+    2: `<option value="">---Sila Pilih Sub Elemen---</option>
+        {% for elemen2 in e2_data %}
+        <option value="{{ elemen2.e2id }}">{{ elemen2.e2 }}</option>
+        {% endfor %}`,
+    3: `<option value="">---Sila Pilih Sub Elemen---</option>
+        {% for elemen3 in e3_data %}
+        <option value="{{ elemen3.e3id }}">{{ elemen3.e3 }}</option>
+        {% endfor %}`,
+    4: `<option value="">---Sila Pilih Sub Elemen---</option>
+        {% for elemen4 in e4_data %}
+        <option value="{{ elemen4.e4id }}">{{ elemen4.e4 }}</option>
+        {% endfor %}`,
+    5: `<option value="">---Sila Pilih Sub Elemen---</option>
+        {% for elemen5 in e5_data %}
+        <option value="{{ elemen5.e5id }}">{{ elemen5.e5 }}</option>
+        {% endfor %}`,
+    6: `<option value="">---Sila Pilih Sub Elemen---</option>
+        {% for elemen6 in e6_data %}
+        <option value="{{ elemen6.e6id }}">{{ elemen6.e6 }}</option>
+        {% endfor %}`,
+    7: `<option value="">---Sila Pilih Sub Elemen---</option>
+        {% for elemen7 in e7_data %}
+        <option value="{{ elemen7.e7id }}">{{ elemen7.e7 }}</option>
+        {% endfor %}`,
+    8: `<option value="">---Sila Pilih Sub Elemen---</option>
+        {% for elemen8 in e8_data %}
+        <option value="{{ elemen8.e8id }}">{{ elemen8.e8 }}</option>
+        {% endfor %}`
+};
+
+window.lokasiOptions = `<option value="">---Sila Pilih Lokasi---</option>
+    {% for lokasi in lokasi_data %}
+    <option value="{{ lokasi.lid }}">{{ lokasi.list_lokasi }}</option>
+    {% endfor %}`;
+
+window.asetOptions = `<option value="">---Sila Pilih Aset---</option>
+    {% for aset in aset_data %}
+    <option value="{{ aset.asetid }}">{{ aset.list_aset }}</option>
+    {% endfor %}`;
+
+// Load existing submission data if available
+window.submissionData = null;
+{% if submission_data %}
+try {
+    window.submissionData = JSON.parse('{{ submission_data|escapejs }}');
+} catch(e) {
+    console.error('Error parsing submission data:', e);
+}
+{% endif %}
+</script>
+
+<script src="{% static 'js/script.js'%}"></script>
+</body>
+</html>
